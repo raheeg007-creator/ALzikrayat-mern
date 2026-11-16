@@ -1,21 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function Gallery() {
-  // داتا تجريبية مؤقتة لحد ما نربط الداتابيز
-  const [photos, setPhotos] = useState([
-    { _id: '1', title: 'Beautiful Sunset', fileName: 'https://picsum.photos/300/200?random=1' },
-    { _id: '2', title: 'Mountain View', fileName: 'https://picsum.photos/300/200?random=2' },
-    { _id: '3', title: 'City Lights', fileName: 'https://picsum.photos/300/200?random=3' }
-  ]);
+  const [photos, setPhotos] = useState([]);
+
+  useEffect(() => {
+    // جلب الصور من الباك إند
+    axios.get('/api/photos')
+      .then(res => setPhotos(res.data))
+      .catch(err => console.error(err));
+  }, []);
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '30px' }}>
       <h1>Photo Gallery</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px', marginTop: '20px' }}>
         {photos.map(photo => (
-          <div key={photo._id} style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '8px' }}>
-            <img src={photo.fileName} alt={photo.title} style={{ width: '100%', borderRadius: '5px' }} />
-            <h3>{photo.title}</h3>
+          <div key={photo._id} style={{ border: '1px solid #ddd', padding: '10px', borderRadius: '8px', background: '#fff' }}>
+            {/* مسار الصورة بيبدأ بـ /uploads */}
+            <img src={`/uploads/${photo.fileName}`} alt={photo.title} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px' }} />
+            <h3 style={{ margin: '10px 0' }}>{photo.title}</h3>
+            <p style={{ fontSize: '12px', color: '#666' }}>By: {photo.userId?.firstName}</p>
           </div>
         ))}
       </div>

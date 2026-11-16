@@ -21,6 +21,7 @@ export default function Navbar() {
         {user ? (
           <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
             <span>Hi, {user.firstName}</span>
+            <Link to="/add-photo" style={{ color: '#facc15', textDecoration: 'none', fontWeight: 'bold' }}>Add Photo</Link>
             <button onClick={handleLogout} style={{ padding: '5px 10px', cursor: 'pointer', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px' }}>Logout</button>
           </div>
         ) : (
