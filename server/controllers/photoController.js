@@ -44,3 +44,10 @@ exports.deletePhoto = async (req, res, next) => {
     res.json({ message: 'Photo deleted' });
   } catch (err) { next(err); }
 }
+exports.getPhotoById = async (req, res, next) => {
+  try {
+    const photo = await Photo.findById(req.params.id).populate('userId', 'firstName lastName');
+    if (!photo) return res.status(404).json({ message: 'Photo not found' });
+    res.json(photo);
+  } catch (err) { next(err); }
+}
