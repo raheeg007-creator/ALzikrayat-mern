@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Gallery from './pages/Gallery';
 import LoginRegister from './pages/LoginRegister';
+import AddPhoto from './pages/AddPhoto';
 
 function App() {
   return (
