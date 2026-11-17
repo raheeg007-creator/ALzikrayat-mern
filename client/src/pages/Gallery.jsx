@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default function Gallery() {
   const [photos, setPhotos] = useState([]);
@@ -18,7 +19,9 @@ export default function Gallery() {
         {photos.map(photo => (
           <div key={photo._id} style={{ border: '1px solid #ddd', padding: '10px', borderRadius: '8px', background: '#fff' }}>
             {/* مسار الصورة بيبدأ بـ /uploads */}
-            <img src={`/uploads/${photo.fileName}`} alt={photo.title} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px' }} />
+            <Link to={`/photos/${photo._id}`}>
+              <img src={`/uploads/${photo.fileName}`} alt={photo.title} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px' }} />
+            </Link>
             <h3 style={{ margin: '10px 0' }}>{photo.title}</h3>
             <p style={{ fontSize: '12px', color: '#666' }}>By: {photo.userId?.firstName}</p>
           </div>

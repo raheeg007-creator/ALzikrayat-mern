@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Gallery from './pages/Gallery';
 import LoginRegister from './pages/LoginRegister';
 import AddPhoto from './pages/AddPhoto';
+import PhotoDetail from './pages/PhotoDetail';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/login" element={<LoginRegister />} />
           <Route path="/add-photo" element={<AddPhoto />} />
+          <Route path="/photos/:id" element={<PhotoDetail />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
