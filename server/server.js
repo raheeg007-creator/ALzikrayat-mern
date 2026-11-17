@@ -1,3 +1,4 @@
+
 //اعداد المتغيرات البيئية من ملف .env
 require('dotenv').config();
 const express = require('express');
@@ -31,3 +32,5 @@ mongoose.connect(process.env.MONGO_URI)
     console.error(' MongoDB connection error:', err.message);
     process.exit(1);
   });
+  const photoRoutes = require('./routes/photoRoutes');
+  app.use('/api/photos', photoRoutes);
