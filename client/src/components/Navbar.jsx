@@ -1,16 +1,16 @@
-import { Link, useNavigate } from 'react-router-dom';
+//لاستخدام مكونات React Router و Context API
+import 
+{ Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-
+// تعريف مكون Navbar لعرض شريط التنقل
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
-
   return (
     <nav style={{ padding: '15px 30px', background: '#222', color: 'white', display: 'flex', gap: '20px', alignItems: 'center' }}>
       <h2 style={{ margin: 0 }}>Alzikrayat </h2>

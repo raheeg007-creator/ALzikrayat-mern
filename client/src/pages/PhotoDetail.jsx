@@ -1,48 +1,61 @@
-import { useState, useEffect, useContext } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
 
+// استيراد React وبعض الأدوات من مكتبة react-router-dom
+import { useState, useEffect, useContext } from 'react';
+// استيراد useParams للحصول على معرّف الصورة من الرابط، وLink للتنقل بين الصفحات، وuseNavigate لإعادة التوجيه بعد الحذف
+import { useParams, Link, useNavigate } from 'react-router-dom';
+// استيراد axios لإجراء طلبات HTTP
+import axios from 'axios';
+// استيراد AuthContext للوصول إلى بيانات المستخدم
+import { AuthContext } from '../context/AuthContext';
+// تعريف مكون PhotoDetail لعرض تفاصيل الصورة والتعليقات
 export default function PhotoDetail() {
   const { id } = useParams(); 
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  
+  // حالة لتخزين بيانات الصورة، التعليقات، والتعليق الجديد
   const [photo, setPhoto] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-
+// عند تحميل المكون أو تغيير معرّف الصورة، نقوم بجلب بيانات الصورة والتعليقات من الخادم
   useEffect(() => {
     axios.get(`/api/photos/${id}`).then(res => setPhoto(res.data)).catch(console.error);
     axios.get(`/api/photos/${id}/comments`).then(res => setComments(res.data)).catch(console.error);
   }, [id]);
-
+// دالة لمعالجة إرسال التعليق الجديد، تقوم بإرسال التعليق إلى الخادم وتحديث قائمة التعليقات عند النجاح
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!user) return alert('Please login to comment');
-    
+    // إرسال التعليق إلى الخادم باستخدام axios
     try {
       const res = await axios.post(`/api/photos/${id}/comments`,
         { comment: newComment },
         { headers: { 'x-user-id': user._id } }
       );
+      // تحديث قائمة التعليقات بإضافة التعليق الجديد في البداية
       setComments([res.data, ...comments]); 
       setNewComment(''); 
+      // إعادة جلب التعليقات من الخادم للتأكد من التحديث
     } catch (err) {
       console.error(err);
       alert('Error adding comment');
     }
   };
-
+// دالة لمعالجة حذف الصورة، تقوم بإرسال طلب الحذف إلى الخادم وإعادة التوجيه إلى معرض الصور عند النجاح
   const handleDelete = async () => {
+    // تأكيد الحذف مع المستخدم قبل الإرسال
     if (window.confirm('Are you sure you want to delete this photo?')) {
       try {
+        // إرسال طلب الحذف إلى الخادم باستخدام axios، مع تمرير معرف المستخدم في الهيدر
         await axios.delete(`/api/photos/${id}`, {
           headers: { 'x-user-id': user._id }
         });
+        // عرض رسالة نجاح وإعادة التوجيه إلى معرض الصور
         alert('Photo deleted successfully!');
         navigate('/gallery'); 
+        // إعادة جلب قائمة الصور من الخادم بعد الحذف
       } catch (err) {
+        // إذا حدث خطأ، عرض رسالة الخطأ للمستخدم
+        console.error(err);
         alert(err.response?.data?.message || 'Error deleting photo');
       }
     }

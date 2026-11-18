@@ -1,3 +1,4 @@
+// استيراد نموذج الصورة ونموذج التعليق، ومكتبة الملفات والمكتبة الخاصة بالمسارات
 const Photo = require('../models/Photo');
 const Comment = require('../models/Comment'); // استدعاء موديل التعليقات
 const fs = require('fs'); // مكتبة الملفات
@@ -5,6 +6,7 @@ const path = require('path'); // مكتبة المسارات
 
 // 1. رفع صورة جديدة
 exports.createPhoto = async (req, res, next) => {
+    // التأكد من وجود ملف مرفوع
   try {
     if (!req.file) return res.status(400).json({ message: 'Please upload a file' });
 

@@ -1,7 +1,9 @@
+//
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+// استيراد Link من react-router-dom للتنقل بين الصفحات
 import { Link } from 'react-router-dom';
-
+// تعريف مكون معرض الصور
 export default function Gallery() {
   const [photos, setPhotos] = useState([]);
   const [isGridView, setIsGridView] = useState(true); 
@@ -48,7 +50,6 @@ export default function Gallery() {
               borderRadius: '10px', 
               background: '#fff', 
               display: 'flex', 
-              // في وضع الشبكة: عمودي (صورة فوق، كلام تحت). في وضع القائمة: أفقي (صورة يمين، كلام شمال)
               flexDirection: isGridView ? 'column' : 'row', 
               gap: '20px', 
               alignItems: isGridView ? 'stretch' : 'center',

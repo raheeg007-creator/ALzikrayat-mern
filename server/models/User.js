@@ -1,5 +1,6 @@
+//لتعريف نموذج المستخدم في قاعدة البيانات باستخدام Mongoose
 const mongoose = require('mongoose');
-
+// تعريف مخطط المستخدم باستخدام Mongoose
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -21,6 +22,7 @@ const userSchema = new mongoose.Schema({
     description:{ type:String},
     occupation:{type:String}
 },
-
+// إضافة timestamps لتتبع وقت إنشاء وتحديث المستندات
     {timestamps:true});
+    // تصدير الموديل لاستخدامه في أماكن أخرى
     module.exports=mongoose.model('User',userSchema);

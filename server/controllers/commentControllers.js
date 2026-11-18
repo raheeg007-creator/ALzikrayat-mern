@@ -1,3 +1,4 @@
+// استيراد نموذج التعليق من ملف النماذج
 const Comment = require('../models/Comment');
 
 // إضافة تعليق
@@ -12,7 +13,7 @@ exports.addComment = async (req, res, next) => {
       comment
     });
 
-    // بنرجع التعليق مع بيانات صاحب التعليق عشان نعرضه فوراً
+    // بنرجع التعليق مع بيانات صاحب التعليق عشان نعرضه 
     const populatedComment = await Comment.findById(newComment._id).populate('userId', 'firstName');
     res.status(201).json(populatedComment);
   } catch (err) { next(err); }
