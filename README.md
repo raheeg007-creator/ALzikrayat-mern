@@ -1,5 +1,8 @@
+## repo
+ git clone <[https://github.com/raheeg007-creator/ALzikrayat-mern]>
+ 
 # ALzikrayat-mern
- git clone <>
+
 A full-stack Photo Sharing Web Application built using the MERN Stack (MongoDB, Express.js, React.js, Node.js). This project is a modern rebuild of the classic "Alzikrayat" application, moving from a hand-written MVC architecture to a scalable REST API and a dynamic React Single Page Application (SPA).
 
 ##  Table of Contents
@@ -93,7 +96,7 @@ ALzikrayat-mern/
 
 1. Clone the repository
 bash
-git clone <رابط_جيتهاب_الخاص_بمشروعك>
+git clone <[https://github.com/raheeg007-creator/ALzikrayat-mern]>
 cd ALzikrayat-mern
 
 2. Backend Setup (Server)
