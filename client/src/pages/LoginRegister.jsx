@@ -12,6 +12,17 @@ export default function LoginRegister() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+
+  const [lastLogin, setLastLogin] = useState('');
+
+useEffect(() => {
+  // قراءة الكوكي
+  const cookies = document.cookie.split('; ');
+  const lastLoginCookie = cookies.find(row => row.startsWith('lastLogin='));
+  if (lastLoginCookie) {
+    setLastLogin(lastLoginCookie.split('=')[1]);
+  }
+}, []);
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
@@ -39,7 +50,12 @@ export default function LoginRegister() {
   return (
     <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
       <h2 style={{ textAlign: 'center' }}>{isLogin ? 'Login' : 'Create an Account'}</h2>
-      
+      // عرض آخر تسجيل دخول إذا كان موجود
+      {lastLogin && isLogin && (
+     <p style={{ textAlign: 'center', color: 'gray', fontSize: '12px' }}>
+      Last login: {new Date(lastLogin).toLocaleString()}
+    </p>
+    )}
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>

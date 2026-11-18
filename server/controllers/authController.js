@@ -48,6 +48,7 @@ exports.login = async (req, res, next) => {
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
+    res.cookie('lastLogin', new Date().toISOString(), { httpOnly: false, maxAge: 24 * 60 * 60 * 1000 }); // تعيين كوكي لتخزين آخر تسجيل دخول
 // إذا كانت بيانات تسجيل الدخول صحيحة، يتم إرجاع استجابة تحتوي على بيانات المستخدم، مع استبعاد كلمة المرور من الاستجابة لأسباب أمنية.
     res.json({
       _id: user._id,
