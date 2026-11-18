@@ -4,10 +4,10 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
 export default function PhotoDetail() {
-  const { id } = useParams();
+  const { id } = useParams(); 
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  
   const [photo, setPhoto] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -20,14 +20,14 @@ export default function PhotoDetail() {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!user) return alert('Please login to comment');
-
+    
     try {
       const res = await axios.post(`/api/photos/${id}/comments`,
         { comment: newComment },
         { headers: { 'x-user-id': user._id } }
       );
-      setComments([res.data, ...comments]);
-      setNewComment('');
+      setComments([res.data, ...comments]); 
+      setNewComment(''); 
     } catch (err) {
       console.error(err);
       alert('Error adding comment');
@@ -40,68 +40,113 @@ export default function PhotoDetail() {
         await axios.delete(`/api/photos/${id}`, {
           headers: { 'x-user-id': user._id }
         });
-        alert('Photo deleted!');
-        navigate('/gallery');
+        alert('Photo deleted successfully!');
+        navigate('/gallery'); 
       } catch (err) {
         alert(err.response?.data?.message || 'Error deleting photo');
       }
     }
   };
 
-  if (!photo) return <h2 style={{ textAlign: 'center', marginTop: '50px' }}>Loading...</h2>;
+  if (!photo) return <h2 style={{textAlign: 'center', marginTop: '50px'}}>Loading...</h2>;
 
   return (
-    <div style={{ padding: '30px', maxWidth: '800px', margin: '0 auto' }}>
-      <Link to="/gallery" style={{ color: 'blue', textDecoration: 'none', marginBottom: '20px', display: 'block' }}>← Back to Gallery</Link>
+    <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
+      
+      {/* زر الرجوع */}
+      <Link to="/gallery" style={{ 
+        display: 'inline-flex', 
+        alignItems: 'center', 
+        color: '#0056b3', 
+        textDecoration: 'none', 
+        backgroundColor: '#e6f2ff',
+        padding: '8px 16px', 
+        borderRadius: '20px', 
+        fontWeight: 'bold',
+        marginBottom: '20px',
+        fontSize: '14px'
+      }}>
+        ← Back to Gallery
+      </Link>
 
-      <h1 style={{ marginBottom: '5px' }}>{photo.title}</h1>
-      <p style={{ color: '#666', fontSize: '14px' }}>Uploaded by {photo.userId?.firstName} {photo.userId?.lastName}</p>
+      {/* رأس الصفحة: العنوان وزر الحذف */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '15px' }}>
+        <div>
+          <h1 style={{ margin: '0 0 5px 0', fontSize: '32px', color: '#222' }}>{photo.title}</h1>
+          <p style={{ color: '#666', fontSize: '15px', margin: 0 }}>
+            Uploaded by <strong>{photo.userId?.firstName} {photo.userId?.lastName}</strong>
+          </p>
+        </div>
 
-      <img
-        src={`/uploads/${photo.fileName}`}
-        alt={photo.title}
-        style={{ width: '100%', maxHeight: '500px', objectFit: 'contain', background: '#222', borderRadius: '10px', marginTop: '15px' }}
-      />
+        {user && photo.userId && user._id === photo.userId._id && (
+          <button 
+            onClick={handleDelete} 
+            style={{ padding: '8px 16px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}
+          >
+            Delete Photo
+          </button>
+        )}
+      </div>
 
-      <p style={{ fontSize: '18px', marginTop: '20px' }}>{photo.description}</p>
-
-      {user && photo.userId && user._id === photo.userId._id && (
-        <button
-          onClick={handleDelete}
-          style={{ padding: '10px 15px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px' }}
-        >
-          Delete Photo
-        </button>
-      )}
-
-      <hr style={{ margin: '30px 0' }} />
-
-      <h3>Comments ({comments.length})</h3>
-
+      {/* حاوية الصورة: لون رمادي فاتح عشان الصورة تبرز */}
+      <div style={{ 
+        backgroundColor: '#f0f2f5', 
+        padding: '20px', 
+        borderRadius: '12px', 
+        marginTop: '20px', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        border: '1px solid #ddd'
+      }}>
+        <img 
+          src={`/uploads/${photo.fileName}`} 
+          alt={photo.title} 
+          style={{ 
+            maxWidth: '100%', 
+            maxHeight: '75vh', /* تاخد 75% من طول الشاشة عشان تبان كبيرة */
+            objectFit: 'contain', 
+            borderRadius: '8px',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.2)' // ظل للصورة عشان تبان كأنها لوحة
+          }} 
+        />
+      </div>
+      <p style={{ fontSize: '18px', marginTop: '25px', lineHeight: '1.6', color: '#444' }}>
+        {photo.description}
+      </p>
+      
+      <hr style={{ margin: '30px 0', border: 'none', borderTop: '1px solid #ddd' }} />
+      
+      <h3 style={{ fontSize: '22px' }}>Comments ({comments.length})</h3>
+      
       {user ? (
-        <form onSubmit={handleCommentSubmit} style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
-          <input
-            type="text"
-            placeholder="Write a comment..."
-            value={newComment}
-            onChange={e => setNewComment(e.target.value)}
-            required
-            style={{ flex: 1, padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+        <form onSubmit={handleCommentSubmit} style={{ marginBottom: '25px', display: 'flex', gap: '10px' }}>
+          <input 
+            type="text" 
+            placeholder="Write a comment..." 
+            value={newComment} 
+            onChange={e => setNewComment(e.target.value)} 
+            required 
+            style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid #ccc', fontSize: '15px' }}
           />
-          <button type="submit" style={{ padding: '10px 20px', background: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Post</button>
+          <button type="submit" style={{ padding: '10px 25px', background: '#007bff', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
+            Post
+          </button>
         </form>
       ) : (
-        <p><Link to="/login">Login</Link> to add a comment.</p>
+        <p style={{ color: '#666' }}><Link to="/login" style={{ color: '#007bff' }}>Login</Link> to add a comment.</p>
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         {comments.map(c => (
-          <div key={c._id} style={{ background: '#f9f9f9', padding: '15px', borderRadius: '8px' }}>
-            <strong style={{ color: '#333' }}>{c.userId?.firstName}</strong>
-            <span style={{ fontSize: '12px', color: '#888', marginLeft: '10px' }}>
-              {new Date(c.dateTime).toLocaleString()}
-            </span>
-            <p style={{ margin: '5px 0 0 0' }}>{c.comment}</p>
+          <div key={c._id} style={{ background: '#f9f9f9', padding: '15px', borderRadius: '8px', border: '1px solid #eee' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+              <strong style={{ color: '#333', fontSize: '15px' }}>{c.userId?.firstName}</strong> 
+              <span style={{ fontSize: '12px', color: '#888' }}>
+                {new Date(c.dateTime).toLocaleString()}
+              </span>
+            </div>
+            <p style={{ margin: 0, color: '#444' }}>{c.comment}</p>
           </div>
         ))}
       </div>
